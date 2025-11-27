@@ -1,21 +1,19 @@
 import { useState } from "react";
-import { api } from "../services/api";
+import { sendPredict } from "../services/predictService";
 
 export function usePredict() {
+  const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
 
-  async function predict(data: any) {
+  const predict = async (payload: any) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await api.post("/predict", data);
-      setResult(res.data);
-    } catch (error) {
-      console.error("Error al predecir:", error);
+      const res = await sendPredict(payload);
+      setResult(res.prediction);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  return { loading, result, predict };
+  return { predict, result, loading };
 }

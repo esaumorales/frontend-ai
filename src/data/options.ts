@@ -1,14 +1,19 @@
-export const options = {
-    sleep_hours: ["Normal", "Insuficiente", "Excesivo"],
-    attendance_percentage: ["Constante", "Irregular", "Regular"],
-    time_management: ["Adecuado", "Caotico", "Deficiente"],
-    study_techniques_usage: ["Intermedio", "Basico", "Avanzado"],
-    study_hours_per_day: ["Adecuadas", "Cortas", "Intensas"],
-    social_media_hours: ["Ligero", "Moderado", "Excesivo"],
-    mental_health_rating: ["Delicada", "Optima", "Estable"],
-    test_anxiety_level: ["Severa", "Moderada", "Leve"],
-    exercise_frequency: ["Activo", "Frecuente", "Sedentario"],
-    focus_level: ["Concentrado", "Disperso"],
-    study_resources_availability: ["Suficientes", "Escasos"],
-  };
-  
+export const habitOptions = {
+  study_hours_per_day: ["Cortas", "Adecuadas", "Intensas"],
+  exercise_frequency: ["Sedentario", "Activo", "Frecuente"],
+  focus_level: ["Disperso", "Concentrado"],
+  study_resources_availability: ["Escasos", "Suficientes"],
+  social_media_hours: ["Poco", "Ligero", "Moderado", "Regular"],
+  mental_health_rating: ["Delicada", "Estable", "Optima"],
+  test_anxiety_level: ["Leve", "Moderada", "Severa"],
+  financial_stress_level: ["Bajo_Estres", "Medio_Estres"],
+  netflix_hours: ["Poco", "Regular"],
+  academic_motivation: ["Limitada", "Media", "Alta"],
+  academic_self_efficacy: ["Inseguro", "Confiado", "Muy_Confiado"],
+  attendance_percentage: ["Irregular", "Regular", "Constante"],
+  time_management: ["Caotico", "Adecuado"],
+  study_techniques_usage: ["Basico", "Intermedio"],
+  procrastination_level: ["Controlada", "Media", "Prolongado"],
+  sleep_hours: ["Insuficiente", "Normal", "Prolongado"],
+  home_study_environment: ["Desfavorable", "Adecuado"],
+};

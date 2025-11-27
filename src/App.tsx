@@ -1,13 +1,13 @@
-
-import './App.css'
-import { Home } from './pages/Home'
+import './App.css';
+import { AuthProvider } from './context/AuthContext';
+import Router from './routes/Router';
 
 function App() {
-
   return (
-    <Home />
-
-  )
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App; 
