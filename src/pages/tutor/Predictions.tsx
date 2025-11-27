@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { getStudents } from "../../services/studentService";
+import { getStudentById, getStudents } from "../../services/studentService";
 import { Eye, X } from "lucide-react";
+import { getPositiveFactors, getNegativeFactors } from "../../utils/factors";
+import { mapRawForUI } from "../../utils/rawMapper";
 
 export default function Predictions() {
   const [students, setStudents] = useState<any[]>([]);
@@ -9,8 +11,9 @@ export default function Predictions() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 📌 Estado del modal
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
+
+  const mapped = selectedStudent?.raw ? mapRawForUI(selectedStudent.raw) : null;
 
   useEffect(() => {
     const loadData = async () => {
@@ -97,10 +100,15 @@ export default function Predictions() {
                 <td className="py-3 px-4 text-center">
                   <button
                     className="p-2 rounded hover:bg-blue-50 text-blue-600 transition"
-                    onClick={() => setSelectedStudent(s)}
+                    onClick={async () => {
+                      const full = await getStudentById(s.id);
+                      setSelectedStudent(full);
+                    }}
                   >
                     <Eye size={20} />
                   </button>
+
+
                 </td>
               </tr>
             ))}
@@ -131,53 +139,86 @@ export default function Predictions() {
 
 
       {/* ============================ */}
-      {/*  MODAL LATERAL PROFESIONAL   */}
+      {/*     MODAL CENTRADO CLEAN     */}
       {/* ============================ */}
       {selectedStudent && (
         <>
-          {/* Background oscuro */}
+          {/* Fondo difuminado */}
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             onClick={() => setSelectedStudent(null)}
           ></div>
 
-          {/* Panel del modal */}
-          <div className="
-            fixed right-0 top-0 h-full w-full md:w-[450px] 
-            bg-white shadow-xl z-50 animate-slideLeft
-            border-l border-gray-200
-          ">
+          {/* Modal */}
+          <div
+            className="
+              fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+              bg-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-lg z-50
+              animate-fadeScale
+            "
+          >
+            {/* Cerrar */}
+            <button
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full"
+              onClick={() => setSelectedStudent(null)}
+            >
+              <X size={18} />
+            </button>
+
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-800">
-                Detalles del Estudiante
-              </h2>
-              <button
-                className="p-2 hover:bg-gray-100 rounded"
-                onClick={() => setSelectedStudent(null)}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gray-200"></div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-800">{selectedStudent.nombre}</h2>
+                <p className="text-sm text-gray-500">Estudiante</p>
+              </div>
+
+              <span
+                className={`
+                  ml-auto px-3 py-1 rounded-full text-xs font-semibold
+                  ${getPerformanceColor(selectedStudent.academic_performance)}
+                `}
               >
-                <X size={20} />
-              </button>
+                {selectedStudent.academic_performance}
+              </span>
             </div>
 
-            {/* Barra azul decorativa */}
-            <div className="w-full h-1 bg-blue-500"></div>
+            {/* Entradas destacadas */}
+            <h3 className="text-sm font-semibold text-gray-700 mb-1">Entradas destacadas</h3>
 
-            {/* Contenido */}
-            <div className="p-6 space-y-4">
-              <p><strong>ID:</strong> {selectedStudent.id}</p>
-              <p><strong>Nombre:</strong> {selectedStudent.nombre}</p>
-              <p><strong>Rendimiento:</strong> {selectedStudent.academic_performance}</p>
-              <p><strong>Puntaje:</strong> {selectedStudent.score ?? "—"}%</p>
+            {/* FACTORES: positivos o negativos */}
+            {mapped && (
+              <ul className="list-disc pl-5 text-gray-600 text-sm space-y-1">
+                {selectedStudent.academic_performance === "Insuficiente"
+                  ? getNegativeFactors(mapped).map((f, i) => <li key={i}>{f}</li>)
+                  : getPositiveFactors(mapped).map((f, i) => <li key={i}>{f}</li>)}
+              </ul>
+            )}
 
-              <div className="mt-6">
-                <button
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
-                  onClick={() => setSelectedStudent(null)}
-                >
-                  Cerrar
-                </button>
-              </div>
+            {/* Interpretación */}
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold text-gray-700">Interpretación</h3>
+
+              <p className="text-gray-600 text-sm mt-2 leading-relaxed">
+                {selectedStudent.academic_performance === "Excelente" &&
+                  "El estudiante muestra hábitos sólidos y un rendimiento académico muy estable."}
+
+                {selectedStudent.academic_performance === "Satisfactorio" &&
+                  "El estudiante mantiene un rendimiento adecuado con margen de mejora en algunos hábitos clave."}
+
+                {selectedStudent.academic_performance === "Insuficiente" &&
+                  "Se observan indicadores de riesgo. Requiere acompañamiento para mejorar sus hábitos académicos."}
+              </p>
+            </div>
+
+            {/* Botón */}
+            <div className="mt-7">
+              <button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                onClick={() => setSelectedStudent(null)}
+              >
+                Toma acción
+              </button>
             </div>
           </div>
         </>

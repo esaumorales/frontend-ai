@@ -106,7 +106,7 @@ export default function Dashboard() {
       </div>
 
       {/* =======================================
-           🔴 TARJETAS DE CLUSTERS (IA)
+            TARJETAS DE CLUSTERS (IA)
          ======================================= */}
       <div>
         <h2 className="text-2xl font-bold mb-3 flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function Dashboard() {
           {clusters.map((c: any, index: number) => (
             <Card
               key={index}
-              className="p-6 bg-white rounded-xl shadow hover:shadow-lg border transition"
+              className="p-6 bg-white rounded-xl shadow hover:shadow-lg  transition"
             >
               <p className="text-sm text-gray-600 font-semibold">
                 Cluster {c.cluster}

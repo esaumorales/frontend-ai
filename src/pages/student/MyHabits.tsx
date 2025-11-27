@@ -68,10 +68,13 @@ export default function MyHabits() {
                 </div>
 
                 <Select
+                  label={habitLabels[key]}
                   value={form[key] || ""}
                   onChange={(e) => handleChange(key, e.target.value)}
-                  options={habitOptions[key]}
+                  options={habitOptions[key as keyof typeof habitOptions]}
                 />
+
+
               </div>
             ))}
           </div>
